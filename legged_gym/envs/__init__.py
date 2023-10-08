@@ -40,6 +40,7 @@ from .cassie.cassie_config import CassieRoughCfg, CassieRoughCfgPPO
 from .a1.a1_config import A1RoughCfg, A1RoughCfgPPO
 from .pupper.pupper import Pupper
 from .pupper.pupper_config import PupperFlatCfg, PupperFlatCfgPPO
+from .pupper.pupper_standup_config import PupperStandCfg, PupperStandCfgPPO
 
 
 import os
@@ -52,3 +53,4 @@ task_registry.register( "anymal_b", Anymal, AnymalBRoughCfg(), AnymalBRoughCfgPP
 task_registry.register( "a1", LeggedRobot, A1RoughCfg(), A1RoughCfgPPO() )
 task_registry.register( "cassie", Cassie, CassieRoughCfg(), CassieRoughCfgPPO() )
 task_registry.register( "pupper_flat", Pupper, PupperFlatCfg(), PupperFlatCfgPPO() )
+task_registry.register( "pupper_stand", Pupper, PupperStandCfg(), PupperStandCfgPPO() )

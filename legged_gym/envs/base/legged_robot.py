@@ -75,6 +75,7 @@ class LeggedRobot(BaseTask):
         self._init_buffers()
         self._prepare_reward_function()
         self.init_done = True
+        self.last_forward_distances = self.root_states[:, 0] - self.env_origins[:, 0] -self.base_init_state[0]
 
     def step(self, actions):
         """ Apply actions, simulate, call self.post_physics_step()
@@ -213,6 +214,22 @@ class LeggedRobot(BaseTask):
     def compute_observations(self):
         """ Computes observations
         """
+        # # print("base roll pitch ", len(self.base_roll_pitch))
+        # self.base_roll_pitch[:] = 0.
+        # self.base_roll_pitch_dot[:] = 0.
+        # # print(self.base_roll_pitch)
+        # # print(self.base_roll_pitch_dot * self.obs_scales.ang_vel)
+        # # set base roll and pitch to zero
+        # self.obs_buf = torch.cat((  #self.base_lin_vel * self.obs_scales.lin_vel,
+        #                           self.base_roll_pitch,
+        #                           self.base_roll_pitch_dot * self.obs_scales.ang_vel,
+        #                             #self.base_ang_vel  * self.obs_scales.ang_vel,
+        #                             #self.projected_gravity,
+        #                             (self.dof_pos - self.default_dof_pos) * self.obs_scales.dof_pos,
+        #                            self.commands[:, :3] * self.commands_scale,
+        #                             #self.dof_vel * self.obs_scales.dof_vel,
+        #                             self.actions
+        #                             ),dim=-1)
         self.obs_buf = torch.cat((  #self.base_lin_vel * self.obs_scales.lin_vel,
                                   self.base_roll_pitch,
                                   self.base_roll_pitch_dot * self.obs_scales.ang_vel,

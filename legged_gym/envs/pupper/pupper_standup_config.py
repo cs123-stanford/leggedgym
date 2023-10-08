@@ -29,108 +29,30 @@
 # Copyright (c) 2021 ETH Zurich, Nikita Rudin
 
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
+from legged_gym.envs.pupper.pupper_config import PupperFlatCfg, PupperFlatCfgPPO
 
-class PupperFlatCfg( LeggedRobotCfg ):
-    # def _process_rigid_body_props(self, props, env_id):
-    #         if self.cfg.domain_rand.randomize_base_mass:
-    #             rng_mass = self.cfg.domain_rand.added_mass_range
-    #             rand_mass = np.random.uniform(rng_mass[0], rng_mass[1], size=(1, ))
-    #             props[0].mass += rand_mass
-    #         else:
-    #             rand_mass = np.zeros(1)
-    #         if self.cfg.domain_rand.randomize_gripper_mass:
-    #             gripper_rng_mass = self.cfg.domain_rand.gripper_added_mass_range
-    #             gripper_rand_mass = np.random.uniform(gripper_rng_mass[0], gripper_rng_mass[1], size=(1, ))
-    #             props[self.gripper_idx].mass += gripper_rand_mass
-    #         else:
-    #             gripper_rand_mass = np.zeros(1)
-    #         if self.cfg.domain_rand.randomize_base_com:
-    #             rng_com_x = self.cfg.domain_rand.added_com_range_x
-    #             rng_com_y = self.cfg.domain_rand.added_com_range_y
-    #             rng_com_z = self.cfg.domain_rand.added_com_range_z
-    #             rand_com = np.random.uniform([rng_com_x[0], rng_com_y[0], rng_com_z[0]], [rng_com_x[1], rng_com_y[1], rng_com_z[1]], size=(3, ))
-    #             props[0].com += gymapi.Vec3(*rand_com)
-    #         else:
-    #             rand_com = np.zeros(3)
-    #         mass_params = np.concatenate([rand_mass, rand_com, gripper_rand_mass])
-    #         return props
-
-
-    class env( LeggedRobotCfg.env ):
-        num_observations = 31# + 15
-  
-    class terrain( LeggedRobotCfg.terrain ):
-        mesh_type = 'plane'
-        curriculum = False
-        horizontal_scale = 0.05 # [m]
-        vertical_scale = 0.0025 # [m]
-        # # terrain types: [smooth slope, rough slope, stairs up, stairs down, discrete]
-        # terrain_proportions = [0.3, 0.5, 0, 0, 0.2]
-        terrain_length = 8.
-        terrain_width = 8.
-        # mesh_type = 'plane'
-        measure_heights = False
+class PupperStandCfg( PupperFlatCfg ):
         
-    class init_state( LeggedRobotCfg.init_state ):
+    class init_state( PupperFlatCfg.init_state ):
         pos = [0.0, 0.0, 0.22] # x,y,z [m]
         rot = [0, 0, 0.7071068, 0.7071068]
-        standup = True # set to False for forward walk task
-        if standup:
-            pos = [0.0, 0.0, 0.1] # x,y,z [m]
-            default_joint_angles = { # = target angles [rad] when action = 0.0
-            'leg2_leftFrontLegMotor': 0.0,   # [rad]
-            'leg4_leftRearLegMotor': 0.0,   # [rad]
-            'leg1_rightFrontLegMotor': -0.0 ,  # [rad]
-            'leg3_rightRearLegMotor': -0.0,   # [rad]
+        pos = [0.0, 0.0, 0.056] # x,y,z [m]
+        default_joint_angles = { # = target angles [rad] when action = 0.0
+        'leg2_leftFrontLegMotor': 0.0,   # [rad]
+        'leg4_leftRearLegMotor': 0.0,   # [rad]
+        'leg1_rightFrontLegMotor': -0.0 ,  # [rad]
+        'leg3_rightRearLegMotor': -0.0,   # [rad]
 
-            'leftFrontUpperLegMotor': 0.0,     # [rad]
-            'leftRearUpperLegMotor': 0.0,   # [rad]
-            'rightFrontUpperLegMotor': 0.0,     # [rad]
-            'rightRearUpperLegMotor': 0.0,   # [rad]
+        'leftFrontUpperLegMotor': 0.0,     # [rad]
+        'leftRearUpperLegMotor': 0.0,   # [rad]
+        'rightFrontUpperLegMotor': 0.0,     # [rad]
+        'rightRearUpperLegMotor': 0.0,   # [rad]
 
-            'leftFrontLowerLegMotor': -1.57,   # [rad]
-            'leftRearLowerLegMotor': -1.57,    # [rad]
-            'rightFrontLowerLegMotor': -1.57,  # [rad]
-            'rightRearLowerLegMotor': -1.57,    # [rad]
-        }
-        else:
-            default_joint_angles = { # = target angles [rad] when action = 0.0
-                'leg2_leftFrontLegMotor': 0.2,   # [rad]
-                'leg4_leftRearLegMotor': 0.2,   # [rad]
-                'leg1_rightFrontLegMotor': -0.2 ,  # [rad]
-                'leg3_rightRearLegMotor': -0.2,   # [rad]
-
-                'leftFrontUpperLegMotor': 0.5,     # [rad]
-                'leftRearUpperLegMotor': 0.5,   # [rad]
-                'rightFrontUpperLegMotor': 0.5,     # [rad]
-                'rightRearUpperLegMotor': 0.5,   # [rad]
-
-                'leftFrontLowerLegMotor': -1.2,   # [rad]
-                'leftRearLowerLegMotor': -1.2,    # [rad]
-                'rightFrontLowerLegMotor': -1.2,  # [rad]
-                'rightRearLowerLegMotor': -1.2,    # [rad]
-            }
-        
-    class sim( LeggedRobotCfg.sim ):
-        dt =  0.002
-        substeps = 1
-
-    class control( LeggedRobotCfg.control ):
-        # PD Drive parameters:
-        control_type = 'P'
-        stiffness = {'LegMotor': 4.}  # [N*m/rad]
-        damping = {'LegMotor': 0.2}     # [N*m*s/rad]
-        # action scale: target angle = actionScale * action + defaultAngle
-        action_scale = 0.3
-        # decimation: Number of control action updates @ sim DT per policy DT
-        decimation = 15
-
-        ambient_temperature = 20.0 # [degC]
-        motor_thermal_resistance = 0.3 # [K/W]
-        motor_electrical_resistance = 0.461 # [Ohm]
-        motor_mass = 0.09 # [kg]
-        motor_specific_heat = 0.9 # [J/(kg*K)]
-        motor_torque_constant = 36 * 0.0069 # [Nm/A]
+        'leftFrontLowerLegMotor': -1.57,   # [rad]
+        'leftRearLowerLegMotor': -1.57,    # [rad]
+        'rightFrontLowerLegMotor': -1.57,  # [rad]
+        'rightRearLowerLegMotor': -1.57,    # [rad]
+    }
 
     class asset( LeggedRobotCfg.asset ):
         file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/pupper/pupper_v2a.urdf'
@@ -143,12 +65,12 @@ class PupperFlatCfg( LeggedRobotCfg ):
   
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.85
-        base_height_target = 0.2
+        base_height_target = 0.11
         forward_velocity_clip = 1.0
         class scales( LeggedRobotCfg.rewards.scales ):
             torques = -0.0
 
-            forward_velocity = 3.0 #30
+            forward_velocity = 0.0 #30
 
             termination = -0.0
             tracking_lin_vel = 0.0
@@ -159,14 +81,13 @@ class PupperFlatCfg( LeggedRobotCfg ):
             torques = -0.0
             dof_vel = -0.
             dof_acc = 0.0
-            base_height = 0.0
+            base_height = 2. 
             feet_air_time =  0.0
             collision = 0.0
             feet_stumble = -0.0 
             action_rate = -0.0
             stand_still = -0.
-            torques = -0.2
-            
+
     class commands( LeggedRobotCfg.commands ):
         heading_command = False
         curriculum = False
@@ -209,12 +130,12 @@ class PupperFlatCfg( LeggedRobotCfg ):
         added_com_range_y = [0.0, 0.0]
         added_com_range_z = [0.0, 0.0]
 
-class PupperFlatCfgPPO( LeggedRobotCfgPPO ):
+class PupperStandCfgPPO( PupperFlatCfgPPO ):
     class algorithm( LeggedRobotCfgPPO.algorithm ):
         entropy_coef = 0.005
     class runner( LeggedRobotCfgPPO.runner ):
         run_name = 'init'
-        experiment_name = 'flat_pupper'
+        experiment_name = 'stand_pupper'
     class policy:
         init_noise_std = 1.0
         actor_hidden_dims = [512, 256, 128]
