@@ -52,7 +52,7 @@ class PupperStandCfg( PupperFlatCfg ):
         'leftRearLowerLegMotor': -1.57,    # [rad]
         'rightFrontLowerLegMotor': -1.57,  # [rad]
         'rightRearLowerLegMotor': -1.57,    # [rad]
-    }
+        }
 
     class asset( LeggedRobotCfg.asset ):
         file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/pupper/pupper_v2a.urdf'
@@ -69,12 +69,10 @@ class PupperStandCfg( PupperFlatCfg ):
         forward_velocity_clip = 1.0
         class scales( LeggedRobotCfg.rewards.scales ):
             torques = -0.0
-
-            forward_velocity = 0.0 #30
-
+            forward_velocity = 0.0
             termination = -0.0
             tracking_lin_vel = 0.0
-            tracking_ang_vel = 0.0 #2
+            tracking_ang_vel = 0.0
             lin_vel_z = -0.0
             ang_vel_xy = -0.0
             orientation = -0.
@@ -93,39 +91,24 @@ class PupperStandCfg( PupperFlatCfg ):
         curriculum = False
         max_curriculum = 2.0
         class ranges:
-            # lin_vel_x = [-0.6, 0.6] # min max [m/s]
-            # lin_vel_y = [-0.8, 0.8]   # min max [m/s]
-            # ang_vel_yaw = [-1, 1]    # min max [rad/s]
-            # heading = [-3.14, 3.14]
-
             lin_vel_x = [0.0, 0.0] # min max [m/s]
             lin_vel_y = [-0.6, -0.9]   # min max [m/s]
             ang_vel_yaw = [0.0, 0.0]    # min max [rad/s]
             heading = [1.57, 1.57]
             
-            #lin_vel_x = [0, 0]
-            #lin_vel_y = [-1.5, -1.5]
-            #ang_vel_yaw = [-0,-0]
 
-            
+
     class domain_rand( LeggedRobotCfg.domain_rand ):
-        randomize_friction = True
-        # friction_range = [0.7, 1.25]
+        randomize_friction = False
         friction_range = [0.0, 0.0]
-        randomize_base_mass = True
-        # added_mass_range = [-0.3, 0.3]
+        randomize_base_mass = False
         added_mass_range = [0.0, 0.0]
         push_robots = False
-        push_interval_s = 8
+        push_interval_s = 0
         max_push_vel_xy = 1.0
-        # stiffness_delta_range = [-2.0, 2.0]
-        # damping_delta_range = [-0.05, 0.05]
         stiffness_delta_range = [-0.0, 0.0]
         damping_delta_range = [0.0, 0.0]
-        randomize_base_com = True
-        # added_com_range_x = [-0.01, 0.01]
-        # added_com_range_y = [-0.01, 0.01]
-        # added_com_range_z = [-0.01, 0.01]
+        randomize_base_com = False
         added_com_range_x = [0.0, 0.0]
         added_com_range_y = [0.0, 0.0]
         added_com_range_z = [0.0, 0.0]

@@ -214,22 +214,10 @@ class LeggedRobot(BaseTask):
     def compute_observations(self):
         """ Computes observations
         """
-        # # print("base roll pitch ", len(self.base_roll_pitch))
-        # self.base_roll_pitch[:] = 0.
-        # self.base_roll_pitch_dot[:] = 0.
-        # # print(self.base_roll_pitch)
-        # # print(self.base_roll_pitch_dot * self.obs_scales.ang_vel)
-        # # set base roll and pitch to zero
-        # self.obs_buf = torch.cat((  #self.base_lin_vel * self.obs_scales.lin_vel,
-        #                           self.base_roll_pitch,
-        #                           self.base_roll_pitch_dot * self.obs_scales.ang_vel,
-        #                             #self.base_ang_vel  * self.obs_scales.ang_vel,
-        #                             #self.projected_gravity,
-        #                             (self.dof_pos - self.default_dof_pos) * self.obs_scales.dof_pos,
-        #                            self.commands[:, :3] * self.commands_scale,
-        #                             #self.dof_vel * self.obs_scales.dof_vel,
-        #                             self.actions
-        #                             ),dim=-1)
+        # remove IMU for Pupper
+        self.base_roll_pitch[:] = 0.
+        self.base_roll_pitch_dot[:] = 0.
+
         self.obs_buf = torch.cat((  #self.base_lin_vel * self.obs_scales.lin_vel,
                                   self.base_roll_pitch,
                                   self.base_roll_pitch_dot * self.obs_scales.ang_vel,
@@ -905,10 +893,6 @@ class LeggedRobot(BaseTask):
         # Penalize base height away from target
         base_height = torch.mean(self.root_states[:, 2].unsqueeze(1) - self.measured_heights, dim=1)
         return torch.square(base_height - self.cfg.rewards.base_height_target)
-    
-    def _reward_torques(self):
-        # Penalize torques
-        return torch.sum(torch.square(self.torques), dim=1)
 
     def _reward_dof_vel(self):
         # Penalize dof velocities
