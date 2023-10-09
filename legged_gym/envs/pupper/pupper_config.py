@@ -121,13 +121,14 @@ class PupperFlatCfg( LeggedRobotCfg ):
         terminate_after_contacts_on = []
         self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
   
-    # TODO: WRITE YOUR CODE HERE
+    # TODO: WRITE YOUR CODE HERE STEP 5
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.85
         base_height_target = 0.2
         forward_velocity_clip = 1.0
         class scales( LeggedRobotCfg.rewards.scales ):
-            forward_velocity = 3.0 #30
+            forward_velocity = 3.0
+            torques = -0.0
             termination = -0.0
             tracking_lin_vel = 0.0
             tracking_ang_vel = 0.0 #2
@@ -143,7 +144,6 @@ class PupperFlatCfg( LeggedRobotCfg ):
             feet_stumble = -0.0 
             action_rate = -0.0
             stand_still = -0.
-            torques = -0.2
     # TODO: WRITE YOUR CODE HERE
             
     class commands( LeggedRobotCfg.commands ):
@@ -156,7 +156,7 @@ class PupperFlatCfg( LeggedRobotCfg ):
             ang_vel_yaw = [0.0, 0.0]    # min max [rad/s]
             heading = [1.57, 1.57]
             
-    # TODO: WRITE YOUR CODE HERE
+    # TODO: WRITE YOUR CODE HERE STEP 6
     class domain_rand( LeggedRobotCfg.domain_rand ):
         randomize_friction = False
         friction_range = [0.0, 0.0]

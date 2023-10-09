@@ -85,19 +85,19 @@ class Pupper(LeggedRobot):
             mass_params = np.concatenate([rand_mass, rand_com])
             return props
 
-    # TODO: WRITE YOUR CODE HERE
+    # TODO: WRITE YOUR CODE HERE STEP 3
     def _reward_base_height(self):
         # Penalize base height away from target, make sure this value is positive
         return 0.0
     # TODO: WRITE YOUR CODE HERE
 
 
-    # TODO: WRITE YOUR CODE HERE
+    # TODO: WRITE YOUR CODE HERE STEP 5
     def _reward_forward_velocity(self):
             return 0
     # TODO: WRITE YOUR CODE HERE
 
-    # TODO: WRITE YOUR CODE HERE
+    # TODO: WRITE YOUR CODE HERE STEP 5
     def _reward_torques(self):
             return 0
     # TODO: WRITE YOUR CODE HERE
