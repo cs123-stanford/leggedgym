@@ -74,42 +74,22 @@ class PupperFlatCfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
         pos = [0.0, 0.0, 0.22] # x,y,z [m]
         rot = [0, 0, 0.7071068, 0.7071068]
-        standup = True # set to False for forward walk task
-        if standup:
-            pos = [0.0, 0.0, 0.1] # x,y,z [m]
-            default_joint_angles = { # = target angles [rad] when action = 0.0
-            'leg2_leftFrontLegMotor': 0.0,   # [rad]
-            'leg4_leftRearLegMotor': 0.0,   # [rad]
-            'leg1_rightFrontLegMotor': -0.0 ,  # [rad]
-            'leg3_rightRearLegMotor': -0.0,   # [rad]
+        default_joint_angles = { # = target angles [rad] when action = 0.0
+            'leg2_leftFrontLegMotor': 0.2,   # [rad]
+            'leg4_leftRearLegMotor': 0.2,   # [rad]
+            'leg1_rightFrontLegMotor': -0.2 ,  # [rad]
+            'leg3_rightRearLegMotor': -0.2,   # [rad]
 
-            'leftFrontUpperLegMotor': 0.0,     # [rad]
-            'leftRearUpperLegMotor': 0.0,   # [rad]
-            'rightFrontUpperLegMotor': 0.0,     # [rad]
-            'rightRearUpperLegMotor': 0.0,   # [rad]
+            'leftFrontUpperLegMotor': 0.5,     # [rad]
+            'leftRearUpperLegMotor': 0.5,   # [rad]
+            'rightFrontUpperLegMotor': 0.5,     # [rad]
+            'rightRearUpperLegMotor': 0.5,   # [rad]
 
-            'leftFrontLowerLegMotor': -1.57,   # [rad]
-            'leftRearLowerLegMotor': -1.57,    # [rad]
-            'rightFrontLowerLegMotor': -1.57,  # [rad]
-            'rightRearLowerLegMotor': -1.57,    # [rad]
+            'leftFrontLowerLegMotor': -1.2,   # [rad]
+            'leftRearLowerLegMotor': -1.2,    # [rad]
+            'rightFrontLowerLegMotor': -1.2,  # [rad]
+            'rightRearLowerLegMotor': -1.2,    # [rad]
         }
-        else:
-            default_joint_angles = { # = target angles [rad] when action = 0.0
-                'leg2_leftFrontLegMotor': 0.2,   # [rad]
-                'leg4_leftRearLegMotor': 0.2,   # [rad]
-                'leg1_rightFrontLegMotor': -0.2 ,  # [rad]
-                'leg3_rightRearLegMotor': -0.2,   # [rad]
-
-                'leftFrontUpperLegMotor': 0.5,     # [rad]
-                'leftRearUpperLegMotor': 0.5,   # [rad]
-                'rightFrontUpperLegMotor': 0.5,     # [rad]
-                'rightRearUpperLegMotor': 0.5,   # [rad]
-
-                'leftFrontLowerLegMotor': -1.2,   # [rad]
-                'leftRearLowerLegMotor': -1.2,    # [rad]
-                'rightFrontLowerLegMotor': -1.2,  # [rad]
-                'rightRearLowerLegMotor': -1.2,    # [rad]
-            }
         
     class sim( LeggedRobotCfg.sim ):
         dt =  0.002
@@ -141,15 +121,14 @@ class PupperFlatCfg( LeggedRobotCfg ):
         terminate_after_contacts_on = []
         self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
   
+    # TODO: WRITE YOUR CODE HERE STEP 5
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.85
         base_height_target = 0.2
         forward_velocity_clip = 1.0
         class scales( LeggedRobotCfg.rewards.scales ):
+            forward_velocity = 3.0
             torques = -0.0
-
-            forward_velocity = 3.0 #30
-
             termination = -0.0
             tracking_lin_vel = 0.0
             tracking_ang_vel = 0.0 #2
@@ -165,49 +144,34 @@ class PupperFlatCfg( LeggedRobotCfg ):
             feet_stumble = -0.0 
             action_rate = -0.0
             stand_still = -0.
-            torques = -0.2
+    # TODO: WRITE YOUR CODE HERE
             
     class commands( LeggedRobotCfg.commands ):
         heading_command = False
         curriculum = False
         max_curriculum = 2.0
         class ranges:
-            # lin_vel_x = [-0.6, 0.6] # min max [m/s]
-            # lin_vel_y = [-0.8, 0.8]   # min max [m/s]
-            # ang_vel_yaw = [-1, 1]    # min max [rad/s]
-            # heading = [-3.14, 3.14]
-
             lin_vel_x = [0.0, 0.0] # min max [m/s]
             lin_vel_y = [-0.6, -0.9]   # min max [m/s]
             ang_vel_yaw = [0.0, 0.0]    # min max [rad/s]
             heading = [1.57, 1.57]
             
-            #lin_vel_x = [0, 0]
-            #lin_vel_y = [-1.5, -1.5]
-            #ang_vel_yaw = [-0,-0]
-
-            
+    # TODO: WRITE YOUR CODE HERE STEP 6
     class domain_rand( LeggedRobotCfg.domain_rand ):
-        randomize_friction = True
-        # friction_range = [0.7, 1.25]
+        randomize_friction = False
         friction_range = [0.0, 0.0]
-        randomize_base_mass = True
-        # added_mass_range = [-0.3, 0.3]
+        randomize_base_mass = False
         added_mass_range = [0.0, 0.0]
         push_robots = False
-        push_interval_s = 8
+        push_interval_s = 0
         max_push_vel_xy = 1.0
-        # stiffness_delta_range = [-2.0, 2.0]
-        # damping_delta_range = [-0.05, 0.05]
         stiffness_delta_range = [-0.0, 0.0]
         damping_delta_range = [0.0, 0.0]
-        randomize_base_com = True
-        # added_com_range_x = [-0.01, 0.01]
-        # added_com_range_y = [-0.01, 0.01]
-        # added_com_range_z = [-0.01, 0.01]
+        randomize_base_com = False
         added_com_range_x = [0.0, 0.0]
         added_com_range_y = [0.0, 0.0]
         added_com_range_z = [0.0, 0.0]
+    # TODO: WRITE YOUR CODE HERE
 
 class PupperFlatCfgPPO( LeggedRobotCfgPPO ):
     class algorithm( LeggedRobotCfgPPO.algorithm ):
